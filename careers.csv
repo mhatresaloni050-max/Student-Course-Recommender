@@ -1,0 +1,62 @@
+streams,required_personality,career,suggested_courses
+Science,analytical,Data Scientist,BSc Computer Science|BSc IT|BTech CSE|MSc Data Science
+Science,analytical,AI Engineer,BTech CSE|BSc Computer Science|MSc AI|MTech AI
+Science,analytical,Machine Learning Engineer,BTech CSE|BSc IT|MSc ML
+Science,analytical,Software Engineer,BSc IT|BSc Computer Science|BTech CSE
+Science,analytical,Cyber Security Analyst,BSc IT|BTech CSE|MSc Cyber Security
+Science,analytical,Cloud Engineer,BTech CSE|BSc IT|MSc Cloud Computing
+Science,analytical,Blockchain Developer,BTech CSE|BSc Computer Science
+Science,analytical,Research Scientist,BSc Science|MSc Science|PhD
+Science,analytical,Biotechnologist,BSc Biotechnology|MSc Biotechnology
+Science,analytical,Microbiologist,BSc Microbiology|MSc Microbiology
+Science,analytical,Bioinformatics Analyst,BSc Bioinformatics|MSc Bioinformatics
+Science,creative,UI/UX Designer,BSc IT|BDes|Diploma in UI UX
+Science,creative,Game Developer,BSc Computer Science|BTech CSE|BCA
+Science,creative,AR VR Developer,BTech CSE|BSc IT|Diploma AR VR
+Science,creative,Product Designer,BDes|BSc Design
+Science,creative,Scientific Illustrator,BSc Science|BFA
+Science,social,Science Teacher,BSc + B.Ed|MSc + B.Ed
+Science,social,Lab Technician,BSc Science|Diploma Lab Technology
+Science,social,Healthcare Analyst,BSc Life Sciences|MSc Health Analytics
+Science,social,Environmental Scientist,BSc Environmental Science|MSc Environmental Science
+Science,leadership,Project Manager,BTech|MBA (after graduation)
+Science,leadership,Technical Manager,BTech|MBA Technology Management
+Science,leadership,Startup Founder,BTech|BSc + MBA Entrepreneurship
+,,,
+Commerce,analytical,Chartered Accountant,BCom + CA
+Commerce,analytical,Cost Accountant,BCom + CMA
+Commerce,analytical,Company Secretary,BCom + CS
+Commerce,analytical,Financial Analyst,BCom|BBA Finance|MCom
+Commerce,analytical,Investment Banker,BCom|BBA Finance|MBA Finance
+Commerce,analytical,Actuary,BSc Statistics|BCom|Actuarial Science
+Commerce,creative,Digital Marketer,BBA Marketing|BCom|BMS
+Commerce,creative,Brand Manager,BBA Marketing|MBA Marketing
+Commerce,creative,Content Strategist,BCom|BBA|BJMC
+Commerce,creative,Advertising Executive,BBA Marketing|BA Mass Media
+Commerce,social,HR Executive,BBA HR|BCom|MBA HR
+Commerce,social,Relationship Manager,BBA|BCom
+Commerce,social,Sales Executive,BBA Sales|BCom
+Commerce,social,Customer Experience Manager,BBA|MBA
+Commerce,leadership,Business Manager,BBA|BMS|MBA
+Commerce,leadership,Operations Manager,BBA Operations|MBA Operations
+Commerce,leadership,Entrepreneur,BBA|BCom|MBA Entrepreneurship
+Commerce,leadership,Retail Manager,BBA Retail|MBA Retail
+,,,
+Arts,analytical,Policy Analyst,BA Political Science|MA Political Science
+Arts,analytical,Sociologist,BA Sociology|MA Sociology
+Arts,analytical,Economist,BA Economics|MA Economics
+Arts,analytical,Archaeologist,BA History|MA Archaeology
+Arts,creative,Content Writer,BA English|MA English
+Arts,creative,Journalist,BA Journalism|BJMC
+Arts,creative,Graphic Designer,BFA|BA Design
+Arts,creative,Animator,BFA Animation|BA Animation
+Arts,creative,Film Maker,BA Film Studies|BFA Film Making
+Arts,creative,Script Writer,BA English|Film Studies
+Arts,social,Psychologist,BA Psychology|BSc Psychology|MA Psychology
+Arts,social,Counsellor,BA Psychology|MA Psychology
+Arts,social,Social Worker,BA Social Work|MSW
+Arts,social,Public Relations Officer,BA Mass Media|MA PR
+Arts,leadership,NGO Manager,BA Social Work|MSW
+Arts,leadership,Political Consultant,BA Political Science|MA Political Science
+Arts,leadership,Public Administrator,BA Public Administration|MA Public Administration
+Arts,leadership,Event Manager,BA Event Management|MBA Event Management
