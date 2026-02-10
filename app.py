@@ -35,39 +35,48 @@ def login():
 
     return jsonify({"message": "Login successful"}), 200
 
-# STUDENT INFO
 @app.route("/student-info", methods=["POST"])
 def student_info():
-    data = request.get_json()
-    if not data:
-        return jsonify({"error": "No data received"}), 400
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data received"}), 400
 
-    required_fields = [
-        "email", "full_name", "age", "grade",
-        "stream", "favorite_subjects", "interests"
-    ]
+        required_fields = [
+            "email", "full_name", "age", "grade",
+            "stream", "favorite_subjects", "interests"
+        ]
 
-    for field in required_fields:
-        if field not in data or str(data[field]).strip() == "":
-            return jsonify({"error": f"{field} is required"}), 400
+        for field in required_fields:
+            if field not in data or str(data[field]).strip() == "":
+                return jsonify({"error": f"{field} is required"}), 400
 
-    students.update_one(
-        {"email": data["email"]},
-        {"$set": {
-            "email": data["email"],
-            "full_name": data["full_name"],
-            "age": int(data["age"]),
-            "grade": data["grade"],
-            "stream": data["stream"],
-            "favorite_subjects": data["favorite_subjects"],
-            "interests": data["interests"],
-            "career_goal": data.get("career_goal", "")
-        }},
-        upsert=True
-    )
+        # Ensure age is an integer
+        try:
+            age = int(data["age"])
+        except:
+            return jsonify({"error": "Age must be a number"}), 400
 
-    return jsonify({"message": "Student info saved"}), 200
+        students.update_one(
+            {"email": data["email"]},
+            {"$set": {
+                "email": data["email"],
+                "full_name": data["full_name"],
+                "age": age,
+                "grade": data["grade"],
+                "stream": data["stream"],
+                "favorite_subjects": data["favorite_subjects"],
+                "interests": data["interests"],
+                "career_goal": data.get("career_goal", "")
+            }},
+            upsert=True
+        )
 
+        return jsonify({"message": "Student info saved"}), 200
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"error": str(e)}), 500
 # SAVE PERSONALITY
 @app.route("/save-personality", methods=["POST"])
 def save_personality():
