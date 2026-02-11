@@ -1,7 +1,7 @@
+from dotenv import load_dotnev
+import os
 from pymongo import MongoClient
 
-client = MongoClient("Mongo_URL")
-db = client["studentdb"]
-
-students = db["students"]
-
+load_dotenv()
+mongo_uri = os.getenv("Mongo_URL")
+client=MongoClient(mongo_uri)
