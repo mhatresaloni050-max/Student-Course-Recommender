@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import psycopg2
+import psycopg2.extras
 import json
 import traceback
 import pandas as pd
-import numpy as np
 import os
 from dotenv import load_dotenv
 
@@ -13,13 +13,16 @@ CORS(app)
 
 # ---------------- ENV ----------------
 load_dotenv()
-
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
 
 # ---------------- DATABASE ----------------
 def get_db_connection():
-    return psycopg2.connect(os.environ.get("DATABASE_URL"))
+    return psycopg2.connect(
+        os.environ.get("DATABASE_URL"),
+        sslmode="require",
+        cursor_factory=psycopg2.extras.RealDictCursor
+    )    
 
 def init_db():
     conn = get_db_connection()
@@ -56,8 +59,10 @@ def init_db():
     conn.close()
 
 init_db()
+
 # ---------------- CSV LOADING ----------------
 data = pd.read_csv("Careers_Dataset.csv")
+
 feature_cols = ["Hobby", "Personality", "Career_Goal", "Stream"]
 
 for col in feature_cols:
@@ -65,22 +70,18 @@ for col in feature_cols:
         data[col] = "unknown"
     data[col] = data[col].fillna("unknown").astype(str).str.strip().str.lower()
 
-if "Average_Fees" not in data.columns:
-    data["Average_Fees"] = 0
-else:
-    data["Average_Fees"] = pd.to_numeric(data["Average_Fees"], errors='coerce').fillna(0)
+data["Average_Fees"] = pd.to_numeric(
+    data.get("Average_Fees", 0), errors="coerce"
+).fillna(0)
 
-if "Course_Type" not in data.columns:
-    data["Course_Type"] = "full-time"
-else:
-    data["Course_Type"] = data["Course_Type"].fillna("full-time").astype(str).str.strip().str.lower()
-
+data["Course_Type"] = data.get("Course_Type", "full-time")
+data["Course_Type"] = data["Course_Type"].fillna("full-time").astype(str).str.strip().str.lower()
 
 # ---------------- HELPERS ----------------
 def normalize(text):
     return text.strip().lower() if text else ""
 
-# ---------------- ROUTES ----------------
+# ---------------- HOME ----------------
 @app.route("/")
 def home():
     return jsonify({"status": "Backend running"})
@@ -89,9 +90,9 @@ def home():
 @app.route("/register", methods=["POST"])
 def register():
     data_in = request.get_json()
-    email = normalize(data_in.get("email",""))
-    password = data_in.get("password","").strip()
-    full_name = data_in.get("full_name","")
+    email = normalize(data_in.get("email", ""))
+    password = data_in.get("password", "").strip()
+    full_name = data_in.get("full_name", "")
 
     conn = get_db_connection()
     cur = conn.cursor()
@@ -106,18 +107,19 @@ def register():
         conn.rollback()
         cur.close()
         conn.close()
-        return jsonify({"error":"User exists"}),409
+        return jsonify({"error": "User exists"}), 409
 
     cur.close()
     conn.close()
-    return jsonify({"message":"Registration successful"})
+    return jsonify({"message": "Registration successful"})
+
 
 # ---------------- LOGIN ----------------
 @app.route("/login", methods=["POST"])
 def login():
     data_in = request.get_json()
-    email = normalize(data_in.get("email",""))
-    password = data_in.get("password","").strip()
+    email = normalize(data_in.get("email", ""))
+    password = data_in.get("password", "").strip()
 
     conn = get_db_connection()
     cur = conn.cursor()
@@ -132,9 +134,11 @@ def login():
     conn.close()
 
     if user:
-        return jsonify({"message":"Login successful"}),200
+        return jsonify({"message": "Login successful"}), 200
 
-    return jsonify({"message":"Invalid credentials"}),401
+    return jsonify({"message": "Invalid credentials"}), 401
+
+
 @app.route("/admin/login", methods=["POST"])
 def admin_login():
     data_in = request.get_json()
@@ -158,69 +162,98 @@ def admin_check():
 def admin_get_students():
     try:
         conn = get_db_connection()
-        students = conn.execute("SELECT full_name, email, stream FROM students").fetchall()
+        cur = conn.cursor()
+
+        cur.execute("SELECT full_name, email, stream FROM students")
+        students = cur.fetchall()
+
+        cur.close()
         conn.close()
-        student_list = [dict(s) for s in students]
-        return jsonify(student_list)
+
+        return jsonify(students)
+
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
-
-
+# ---------------- STUDENT INFO ----------------
 @app.route("/student-info", methods=["POST"])
 def student_info():
     data_in = request.get_json()
+
     if not data_in or "email" not in data_in:
-        return jsonify({"error":"No data"}),400
+        return jsonify({"error": "No data"}), 400
+
     email = normalize(data_in["email"])
+
     conn = get_db_connection()
-    conn.execute("""
+    cur = conn.cursor()
+
+    cur.execute("""
         UPDATE students SET
-            full_name=?, age=?, grade=?, stream=?, 
-            interests=?, career_goal=?, budget=?, course_type=?
-        WHERE email=?
+            full_name=%s,
+            age=%s,
+            grade=%s,
+            stream=%s,
+            interests=%s,
+            career_goal=%s,
+            budget=%s,
+            course_type=%s
+        WHERE email=%s
     """, (
-        data_in.get("full_name",""),
+        data_in.get("full_name", ""),
         data_in.get("age"),
         data_in.get("grade"),
         data_in.get("stream"),
         data_in.get("interests"),
-        data_in.get("career_goal",""),
-        data_in.get("budget",0),
-        data_in.get("course_type","full-time"),
+        data_in.get("career_goal", ""),
+        data_in.get("budget", 0),
+        data_in.get("course_type", "full-time"),
         email
     ))
-    conn.commit()
-    conn.close()
-    return jsonify({"message":"Student info saved"})
 
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({"message": "Student info saved"})
+
+
+# ---------------- SAVE PERSONALITY ----------------
 @app.route("/save-personality", methods=["POST"])
 def save_personality():
     try:
         data_in = request.get_json()
-        if not data_in or "email" not in data_in:
-            return jsonify({"error": "Missing email"}), 400
-        email = normalize(data_in["email"])
-        personality = normalize(data_in.get("personality",""))
+        email = normalize(data_in.get("email", ""))
+        personality = normalize(data_in.get("personality", ""))
         scores = data_in.get("scores", {})
-        if not personality:
-            return jsonify({"error": "Personality type cannot be empty"}), 400
-        if not isinstance(scores, dict):
-            return jsonify({"error": "Scores must be a JSON object"}), 400
+
         conn = get_db_connection()
-        exists = conn.execute("SELECT 1 FROM students WHERE email=?", (email,)).fetchone()
+        cur = conn.cursor()
+
+        cur.execute("SELECT 1 FROM students WHERE email=%s", (email,))
+        exists = cur.fetchone()
+
         if not exists:
+            cur.close()
             conn.close()
             return jsonify({"error": "Student not found"}), 404
-        conn.execute("""
-            UPDATE students SET personality_type=?, personality_scores=? WHERE email=?
+
+        cur.execute("""
+            UPDATE students
+            SET personality_type=%s,
+                personality_scores=%s
+            WHERE email=%s
         """, (personality, json.dumps(scores), email))
+
         conn.commit()
+        cur.close()
         conn.close()
-        return jsonify({"message":"Personality saved successfully"})
+
+        return jsonify({"message": "Personality saved successfully"})
+
     except Exception as e:
         traceback.print_exc()
-        return jsonify({"error": str(e)}),500
+        return jsonify({"error": str(e)}), 500
 
 # ---------------- RECOMMEND ----------------
 @app.route("/recommend", methods=["POST"])
@@ -323,45 +356,93 @@ def recommend():
             added_courses.add(course_name)
 
         # ---------------- SAVE TO DATABASE ----------------
+               # ---------------- SAVE TO DATABASE ----------------
         if email:
             conn = get_db_connection()
-            rec_json = json.dumps(recommendations)
-            exists = conn.execute("SELECT 1 FROM recommendations WHERE email=?", (email,)).fetchone()
-            if exists:
-                conn.execute("UPDATE recommendations SET careers=? WHERE email=?", (rec_json, email))
-            else:
-                conn.execute("INSERT INTO recommendations (email, careers) VALUES (?,?)", (email, rec_json))
-            conn.commit()
-            conn.close()
+            cur = conn.cursor()
 
+            rec_json = json.dumps(recommendations)
+
+            cur.execute("SELECT 1 FROM recommendations WHERE email=%s", (email,))
+            exists = cur.fetchone()
+
+            if exists:
+                cur.execute(
+                    "UPDATE recommendations SET careers=%s WHERE email=%s",
+                    (rec_json, email)
+                )
+            else:
+                cur.execute(
+                    "INSERT INTO recommendations (email, careers) VALUES (%s,%s)",
+                    (email, rec_json)
+                )
+
+            conn.commit()
+            cur.close()
+            conn.close()
         return jsonify(recommendations)
 
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
-# ---------------- DASHBOARDS ----------------
+# ---------------- STUDENT DASHBOARD ----------------
 @app.route("/student/dashboard", methods=["GET"])
 def student_dashboard():
-    email = normalize(request.args.get("email",""))
-    conn = get_db_connection()
-    student = conn.execute("SELECT * FROM students WHERE email=?", (email,)).fetchone()
-    if not student:
-        conn.close()
-        return jsonify({"error":"Student not found"}),404
-    rec = conn.execute("SELECT * FROM recommendations WHERE email=?", (email,)).fetchone()
-    careers = json.loads(rec["careers"]) if rec and rec["careers"] else []
-    conn.close()
-    return jsonify({"student": dict(student), "careers": careers})
+    email = normalize(request.args.get("email", ""))
 
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM students WHERE email=%s", (email,))
+    student = cur.fetchone()
+
+    if not student:
+        cur.close()
+        conn.close()
+        return jsonify({"error": "Student not found"}), 404
+
+    cur.execute("SELECT * FROM recommendations WHERE email=%s", (email,))
+    rec = cur.fetchone()
+
+    careers = json.loads(rec["careers"]) if rec and rec["careers"] else []
+
+    cur.close()
+    conn.close()
+
+    return jsonify({
+        "student": student,
+        "careers": careers
+    })
+
+
+# ---------------- ADMIN DASHBOARD ----------------
 @app.route("/admin/dashboard", methods=["GET"])
 def admin_dashboard():
     conn = get_db_connection()
-    total_students = conn.execute("SELECT COUNT(*) AS total FROM students").fetchone()["total"]
-    stream_stats = conn.execute("SELECT stream, COUNT(*) AS count FROM students GROUP BY stream").fetchall()
-    stream_stats = [{"stream": s["stream"], "count": s["count"]} for s in stream_stats]
+    cur = conn.cursor()
+
+    cur.execute("SELECT COUNT(*) FROM students")
+    total_students = cur.fetchone()["count"]
+
+    cur.execute("SELECT stream, COUNT(*) FROM students GROUP BY stream")
+    rows = cur.fetchall()
+
+    stream_stats = []
+    for row in rows:
+        stream_stats.append({
+            "stream": row["stream"],
+            "count": row["count"]
+        })
+
+    cur.close()
     conn.close()
-    return jsonify({"total_students": total_students, "stream_stats": stream_stats})
+
+    return jsonify({
+        "total_students": total_students,
+        "stream_stats": stream_stats
+    })
+
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
