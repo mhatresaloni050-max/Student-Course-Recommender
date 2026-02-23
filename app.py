@@ -135,9 +135,8 @@ def login():
 
     if user:
         return jsonify({"message": "Login successful"}), 200
-
-    return jsonify({"message": "Invalid credentials"}), 401
-
+    else:
+        return jsonify({"message": "Invalid credentials"}), 401
 
 @app.route("/admin/login", methods=["POST"])
 def admin_login():
