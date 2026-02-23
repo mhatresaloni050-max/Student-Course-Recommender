@@ -1,0 +1,46 @@
+Hobby,Personality,Stream,Career_Goal,Recommended_Courses,Nearby_Colleges,College_Websites,Course_Type,Average_Fees
+coding,analytical,science,software developer,B.Tech Computer Science,IIT Delhi|DTU Delhi|NSUT Delhi,https://iitd.ac.in|https://dtu.ac.in|https://nsut.ac.in,full-time,220000
+coding,analytical,science,software developer,BCA,Christ University|SICSR Pune|Loyola Chennai,https://christuniversity.in|https://sicsr.ac.in|https://loyolacollege.edu,full-time,160000
+maths,analytical,science,data scientist,B.Sc Data Science,IIT Madras|NMIMS Mumbai|SP Jain Global,https://iitm.ac.in|https://nmims.edu|https://spjain.org,full-time,350000
+gaming,analytical,science,ai engineer,B.Tech AI & ML,IIT Hyderabad|VIT Vellore|SRM Chennai,https://iith.ac.in|https://vit.ac.in|https://srmist.edu.in,full-time,280000
+reading,analytical,science,cybersecurity,B.Tech Cyber Security,NFSU Gujarat|Amrita Coimbatore|LPU Punjab,https://nfsu.ac.in|https://amrita.edu|https://lpu.in,full-time,245000
+helping,social,science,doctor,MBBS,AIIMS Delhi|MAMC Delhi|VMMC Delhi,https://aiims.edu|https://mamc.ac.in|https://vmmc-sjh.nic.in,full-time,15000
+helping,social,science,dentist,BDS,Maulana Azad Dental|Nair Dental Mumbai|IMS BHU,https://mamc.ac.in|http://nairdental.org|https://bhu.ac.in,full-time,80000
+science,analytical,science,pharmacist,B.Pharm,Jamia Hamdard|BITS Pilani|ICT Mumbai,https://jamiahamdard.edu|https://bits-pilani.ac.in|https://ictmumbai.edu.in,full-time,110000
+exercise,social,science,physiotherapist,BPT,KMC Manipal|IPGMER Kolkata|GGSIPU Delhi,https://manipal.edu|http://ipgmer.gov.in|http://ipu.ac.in,full-time,165000
+helping,social,science,nurse,B.Sc Nursing,St. Johns Bangalore|AFMC Pune|Apollo Nursing,https://stjohns.in|https://afmc.nic.in|https://apollohospitals.com,full-time,110000
+building,analytical,science,civil engineer,B.Tech Civil,IIT Roorkee|NIT Trichy|VNIT Nagpur,https://iitr.ac.in|https://nitt.edu|https://vnit.ac.in,full-time,195000
+machines,analytical,science,mechanical engineer,B.Tech Mechanical,IIT Bombay|NIT Surathkal|COEP Pune,https://iitb.ac.in|https://nitk.ac.in|https://coep.org.in,full-time,210000
+physics,analytical,science,electrical engineer,B.Tech EE,IIT Kanpur|BITS Pilani|RVCE Bangalore,https://iitk.ac.in|https://bits-pilani.ac.in|https://rvce.edu.in,full-time,230000
+drawing,creative,science,architect,B.Arch,SPA Delhi|CEPT Ahmedabad|Sir JJ Architecture,http://spa.ac.in|https://cept.ac.in|http://sirjjarchitecture.org,full-time,185000
+biology,analytical,science,biotechnologist,B.Tech Biotech,IIT Delhi|DTU Delhi|Anna University,https://iitd.ac.in|https://dtu.ac.in|https://annauniv.edu,full-time,240000
+research,analytical,science,microbiologist,B.Sc Microbiology,St. Xaviers Kolkata|Mount Carmel|Fergusson Pune,https://sxccal.edu|https://mccblr.edu.in|https://fergusson.edu,full-time,90000
+finance,analytical,commerce,investment banker,B.Com Honors,SRCC Delhi|Hindu College|St. Xaviers Mumbai,https://srcc.edu|https://hinducollege.ac.in|https://xaviers.edu,full-time,35000
+business,analytical,commerce,business analyst,BBA Finance,SSCBS Delhi|NMIMS Mumbai|Symbiosis Pune,https://sscbs.du.ac.in|https://nmims.edu|https://siu.edu.in,full-time,320000
+maths,analytical,commerce,chartered accountant,B.Com + CA Prep,ICAI|JK Shah Classes|Aldine CA,https://icai.org|https://jkshahclasses.com|https://aldine.edu.in,full-time,60000
+leadership,leadership,commerce,entrepreneur,BBA Entrepreneurship,EDII Gujarat|FLAME Pune|Bennett University,https://ediiindia.org|https://flame.edu.in|https://bennett.edu.in,full-time,450000
+writing,creative,arts,journalist,B.A. Journalism,IIMC Delhi|XIC Mumbai|Asian College,http://iimc.gov.in|https://xaviercomm.org|https://asianmedia.org,full-time,195000
+politics,leadership,arts,ias aspirant,B.A. Political Science,Hindu College|St. Stephens|Ramjas Delhi,https://hinducollege.ac.in|https://ststephens.edu|https://ramjas.du.ac.in,full-time,22000
+coding,analytical,science,software engineer,B.Tech Computer Science,IIT Roorkee|NIT Trichy|BITS Pilani,https://iitr.ac.in|https://nitt.edu|https://bits-pilani.ac.in,full-time,220000
+sketching,creative,science,architect,B.Arch,SPA Delhi|CEPT Ahmedabad|Sir JJ Architecture,http://spa.ac.in|https://cept.ac.in|http://sirjjarchitecture.org,full-time,180000
+logic,analytical,science,data analyst,B.Sc Data Science,IIT Kanpur|Loyola Chennai|Christ University,https://iitk.ac.in|https://loyolacollege.edu|https://christuniversity.in,full-time,210000
+electronics,analytical,science,electrical engineer,B.Tech EE,IIT Madras|NIT Surathkal|RVCE Bangalore,https://iitm.ac.in|https://nitk.ac.in|https://rvce.edu.in,full-time,235000
+designing,creative,arts,fashion designer,B.Des Fashion,NIFT Delhi|Pearl Academy|NIFT Mumbai,https://nift.ac.in/delhi|https://pearlacademy.com|https://nift.ac.in/mumbai,full-time,290000
+investing,analytical,commerce,stock trader,B.Voc Financial Markets,KC College Mumbai|HR College|BSE Institute,https://kccollege.edu.in|https://hrcollege.edu|https://bseinstitute.com,full-time,85000
+debating,leadership,arts,lawyer,BA LLB,NLSIU Bangalore|NALSAR Hyderabad|WBNUJS Kolkata,https://nls.ac.in|https://nalsar.ac.in|https://nujs.edu,full-time,255000
+management,leadership,commerce,business manager,BBA,SSCBS Delhi|NMIMS Mumbai|Symbiosis Pune,https://sscbs.du.ac.in|https://nmims.edu|https://siu.edu.in,full-time,310000
+writing,creative,arts,content writer,B.A. English Hons,St. Stephens|LSR Delhi|Miranda House,https://ststephens.edu|https://lsr.edu.in|https://mirandahouse.ac.in,full-time,25000
+photography,creative,arts,photographer,B.A. Photography,AAFT Noida|Light & Life Academy|Symbiosis SSV,https://aaft.com|https://llacademy.org|https://ssv.edu.in,full-time,280000
+teaching,social,arts,teacher,B.El.Ed,Lady Irwin Delhi|Miranda House|TISS Mumbai,https://ladyirwin.edu.in|https://mirandahouse.ac.in|https://tiss.edu,full-time,30000
+fitness,active,science,sports scientist,B.Sc Sports Science,NSNIS Patiala|LNIPE Gwalior|DY Patil,https://nsnis.org|http://lnipe.edu.in|https://dypatil.edu,full-time,80000
+biology,analytical,science,biotechnologist,B.Tech Biotech,IIT Kharagpur|DTU Delhi|Anna ,,,
+University,https://iitkgp.ac.in|https://dtu.ac.in|https://annauniv.edu,full-time,240000,,,,,
+helping,social,science,nurse,B.Sc Nursing,AIIMS Delhi|AFMC Pune|St. Johns,https://aiims.edu|https://afmc.nic.in|https://stjohns.in,full-time,100000
+numbers,analytical,commerce,accountant,B.Com Taxation,SRCC Delhi|St. Xaviers Mumbai|Loyola Chennai,https://srcc.edu|https://xaviers.edu|https://loyolacollege.edu,full-time,50000
+gaming,creative,science,game developer,B.Sc Game Design,Backstage Pass|ICAT Chennai|Seamedu Pune,https://backstagepass.co.in|https://icat.ac.in|https://seamedu.com,full-time,220000
+psychology,social,arts,psychologist,B.A. Psychology,LSR Delhi|Jesus & Mary|Fergusson Pune,https://lsr.edu.in|https://jmc.ac.in|https://fergusson.edu,full-time,60000
+cooking,creative,arts,chef,B.A. Culinary Arts,WGSHA Manipal|IHM Aurangabad|IHM Pusa,https://manipal.edu|https://ihmaurangabad.ac.in|http://ihmpusa.net,full-time,350000
+environment,social,science,environmentalist,B.Sc Env Science,JNU Delhi|BHU Varanasi|Fergusson Pune,https://jnu.ac.in|https://bhu.ac.in|https://fergusson.edu,full-time,40000
+travelling,social,commerce,travel agent,B.A. Tourism,IITTM Gwalior|IGNOU|Amity Tourism,https://iittm.ac.in|http://ignou.ac.in|https://amity.edu,full-time,80000
+marketing,creative,commerce,digital marketer,BBA Marketing,IIDE Mumbai|MICA Ahmedabad|Digital Vidya,https://iide.co|https://mica.ac.in|https://digitalvidya.com,full-time,180000
+history,analytical,arts,archaeologist,B.A. Archaeology,Deccan College Pune|MSU Baroda|BHU,https://dcpune.ac.in|https://msubaroda.ac.in|https://bhu.ac.in,full-time,30000
