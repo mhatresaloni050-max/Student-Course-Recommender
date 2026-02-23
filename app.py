@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import sqlite3
+import psycopg2
 import json
 import traceback
 import pandas as pd
@@ -8,33 +8,26 @@ import numpy as np
 import os
 from dotenv import load_dotenv
 
-
 app = Flask(__name__)
 CORS(app)
 
-DB_PATH = "student_reco.db"
-
-# ---------------- ADMIN ----------------
+# ---------------- ENV ----------------
 load_dotenv()
 
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
-# ---------------- HELPERS ----------------
-def normalize(text):
-    return text.strip().lower() if text else ""
 
 # ---------------- DATABASE ----------------
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH, timeout=10, check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    return conn
+    return psycopg2.connect(os.environ.get("DATABASE_URL"))
 
 def init_db():
     conn = get_db_connection()
     cur = conn.cursor()
+
     cur.execute("""
     CREATE TABLE IF NOT EXISTS students (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         full_name TEXT,
         email TEXT UNIQUE,
         password TEXT,
@@ -49,18 +42,20 @@ def init_db():
         course_type TEXT DEFAULT 'full-time'
     )
     """)
+
     cur.execute("""
     CREATE TABLE IF NOT EXISTS recommendations (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id SERIAL PRIMARY KEY,
         email TEXT UNIQUE,
         careers TEXT
     )
     """)
+
     conn.commit()
+    cur.close()
     conn.close()
 
 init_db()
-
 # ---------------- CSV LOADING ----------------
 data = pd.read_csv("Careers_Dataset.csv")
 feature_cols = ["Hobby", "Personality", "Career_Goal", "Stream"]
@@ -80,47 +75,66 @@ if "Course_Type" not in data.columns:
 else:
     data["Course_Type"] = data["Course_Type"].fillna("full-time").astype(str).str.strip().str.lower()
 
+
+# ---------------- HELPERS ----------------
+def normalize(text):
+    return text.strip().lower() if text else ""
+
 # ---------------- ROUTES ----------------
 @app.route("/")
 def home():
-    return jsonify({"status":"Backend running"})
+    return jsonify({"status": "Backend running"})
 
+# ---------------- REGISTER ----------------
 @app.route("/register", methods=["POST"])
 def register():
     data_in = request.get_json()
-    if not data_in:
-        return jsonify({"error":"No data"}), 400
     email = normalize(data_in.get("email",""))
     password = data_in.get("password","").strip()
     full_name = data_in.get("full_name","")
-    if not email or not password:
-        return jsonify({"error":"Missing email or password"}),400
+
     conn = get_db_connection()
+    cur = conn.cursor()
+
     try:
-        conn.execute("INSERT INTO students (email,password,full_name) VALUES (?,?,?)",
-                     (email,password,full_name))
+        cur.execute(
+            "INSERT INTO students (email,password,full_name) VALUES (%s,%s,%s)",
+            (email, password, full_name)
+        )
         conn.commit()
-    except sqlite3.IntegrityError:
+    except Exception:
+        conn.rollback()
+        cur.close()
         conn.close()
         return jsonify({"error":"User exists"}),409
+
+    cur.close()
     conn.close()
     return jsonify({"message":"Registration successful"})
 
+# ---------------- LOGIN ----------------
 @app.route("/login", methods=["POST"])
 def login():
     data_in = request.get_json()
     email = normalize(data_in.get("email",""))
     password = data_in.get("password","").strip()
+
     conn = get_db_connection()
-    user = conn.execute(
-        "SELECT * FROM students WHERE email=? AND password=?",
-        (email,password)
-    ).fetchone()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM students WHERE email=%s AND password=%s",
+        (email, password)
+    )
+    user = cur.fetchone()
+
+    cur.close()
     conn.close()
+
     if user:
         return jsonify({"message":"Login successful"}),200
-    return jsonify({"message":"Invalid credentials"}),401
 
+    return jsonify({"message":"Invalid credentials"}),401
 @app.route("/admin/login", methods=["POST"])
 def admin_login():
     data_in = request.get_json()
