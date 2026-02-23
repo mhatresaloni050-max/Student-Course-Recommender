@@ -1,3 +1,5 @@
 .env
-student_reco.db
 __pycache__/
+*.db
+*.db-shm
+*.db-wal
